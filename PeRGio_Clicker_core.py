@@ -36,7 +36,7 @@ DEFAULTS = {
     "y": None,
     "interval_minutes": 1.0,
     "scroll": -200,
-    "move_jitter": 20,
+    "move_jitter": 200,
     "start_delay_sec": 5
 }
 
