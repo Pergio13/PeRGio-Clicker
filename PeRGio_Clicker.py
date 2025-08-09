@@ -9,7 +9,7 @@ PeRGio Clicker — Always Embedded Core
 import sys, json, hashlib, threading, time, re, types
 from pathlib import Path
 
-REMOTE_URL = "https://drive.google.com/uc?export=download&id=138dbnZvXxXafLmh825fR2gOSkSEfYN06"
+REMOTE_URL = "https://raw.githubusercontent.com/Pergio13/PeRGio-Clicker/refs/heads/main/PeRGio_Clicker_core.py"
 
 APP_DIR = Path(sys.executable).resolve().parent if getattr(sys, "frozen", False) else Path(__file__).resolve().parent
 UPD_DIR = APP_DIR / "updates"; UPD_DIR.mkdir(exist_ok=True, parents=True)
