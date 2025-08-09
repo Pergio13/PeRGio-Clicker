@@ -15,10 +15,12 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Install deps
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
+      - name: Install dependencies
+  shell: pwsh
+  run: |
+    python -m pip install --upgrade pip
+    pip install pyinstaller==6.6.0 pyautogui requests
+
 
       - name: Build EXE
         run: |
