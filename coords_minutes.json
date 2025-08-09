@@ -1,0 +1,8 @@
+{
+  "x": 1200,
+  "y": 650,
+  "interval_minutes": 5.0,
+  "scroll": -200,
+  "move_jitter": 20,
+  "start_delay_sec": 5
+}
