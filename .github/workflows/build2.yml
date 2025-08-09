@@ -1,0 +1,53 @@
+name: Build PeRGio Clicker EXE
+
+on:
+  workflow_dispatch:        # Τρέχεις χειροκίνητα από Actions
+  push:
+    tags: ['v*']            # Αν κάνεις tag (π.χ. v1.0.0) θα φτιάξει Release
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies (no requirements.txt)
+        shell: pwsh
+        run: |
+          python -m pip install --upgrade pip
+          pip install pyinstaller==6.6.0 pyautogui requests
+
+      - name: Verify required files
+        shell: pwsh
+        run: |
+          if (!(Test-Path "PeRGio_Clicker.py")) { throw "PeRGio_Clicker.py not found" }
+          if (!(Test-Path "icon.ico")) { Write-Host "WARNING: icon.ico not found, building without icon." }
+          if (!(Test-Path "coords_minutes.json")) { Write-Host "INFO: coords_minutes.json not found; skip copy." }
+
+      - name: Build EXE with PyInstaller
+        shell: pwsh
+        run: |
+          $iconArg = (Test-Path "icon.ico") ? "--icon icon.ico" : ""
+          pyinstaller --clean --onefile --noconsole $iconArg --name "PeRGio_Clicker" PeRGio_Clicker.py
+          if (Test-Path "coords_minutes.json") { Copy-Item coords_minutes.json dist\coords_minutes.json -Force }
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: PeRGio_Clicker_build
+          path: |
+            dist/PeRGio_Clicker.exe
+            dist/coords_minutes.json
+
+      - name: Create GitHub Release (on tag)
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/PeRGio_Clicker.exe
